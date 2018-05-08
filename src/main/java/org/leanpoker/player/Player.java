@@ -21,33 +21,51 @@ import static org.leanpoker.player.Rank.V9;
 
 public class Player {
 
-    static final String VERSION = "Bright Cat V4";
+    static final String VERSION = "Bright Cat V5";
 
-    public static int betRequest(GameState gameState) {
+    public static int betRequestV2(GameState gameState) {
 
+        Card card1 = gameState.players[gameState.in_action].hole_cards[0];
+        Card card2 = gameState.players[gameState.in_action].hole_cards[1];
 
+        int weight = calcHandsWeight(card1, card2);
+        boolean raise = false;
+        boolean fold = false;
 
-
-        /*
-
-        int rankCardStat[] = new int[] {};
-
-
-        for (int i=0; i < rankCardStat.length; i++ ) {
-            rankCardStat[i] = 0;
-        }
-
-
-
-        for (int i=0; i < gameState.community_cards.length; i++ ) {
-            Card cc = gameState.community_cards[i];
-            rankCardStat[getRank(cc.rank)] = rankCardStat[getRank(cc.rank)] + 1;
+        if (gameState.current_buy_in > gameState.players[gameState.in_action].bet) {
 
         }
+        //current_buy_in - players[in_action][bet]
 
 
+        if (gameState.in_action == gameState.dealer)
+        {
+            if (weight >= 7)
+                raise = true;
+            else
+                fold = true;
+        } else if (gameState.in_action-1 == gameState.dealer) {
+            if (weight >= 9)
+                raise = true;
+            else
+                fold = true;
+        } else {
+            if (weight >= 8)
+                raise = true;
+            else
+                fold = true;
+        }
 
-*/
+        if (raise)
+            return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
+        else if (fold)
+            return 0;
+        else
+            return 0;
+
+    }
+
+    public static int betRequestV1(GameState gameState) {
 
 
         ArrayList<Integer> communityCards = new ArrayList<>();
@@ -151,13 +169,7 @@ public class Player {
 
 
 
-
-
-
-        //return 10000;
-
-
-        if (gameState.round < 3 && communityCards.size() == 0) {
+        if (gameState.round < 3 && gameState.community_cards.length == 0) {
             //minimum preflop raise
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         }
@@ -177,11 +189,10 @@ public class Player {
         else if (pairs == 1) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         }
-        else if (communityCards.size() == 0)
+        else if (gameState.community_cards.length == 0)
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
         else {
-            //NEVER FOLD
-            return 0; //return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
+            return 0;
         }
 
 
@@ -233,5 +244,71 @@ public class Player {
 
 
         return count;
+    }
+
+
+
+
+
+
+
+
+
+    private static Integer calcHandsWeight(Card card1, Card card2) {
+        Integer card1Rank = getRankAsInt(card1.rank);
+        Integer card2Rank = getRankAsInt(card2.rank);
+
+        Integer highCard = card1Rank;
+        Integer lowCard = card2Rank;
+        // get the highest card
+        if (card2Rank > card1Rank) {
+            highCard = card2Rank;
+            lowCard = card1Rank;
+        }
+
+        Double value = highCard.doubleValue();
+        // 1. map to chen values
+        if (highCard == 14) {
+            value = 10.0; // A
+        } else if (highCard == 13) {
+            value = 8.0; // K
+        } else if (highCard == 12) {
+            value = 7.0; // Q
+        } else if (highCard == 11) {
+            value = 6.0; // J
+        } else if (highCard <= 10) {
+            value = value / 2.0; // if it's 10 or lower divide value by 2
+        }
+
+        // 2. double if we have a pair (but min to 5)
+        Boolean pocketPair = false;
+        if (card1Rank == card2Rank) {
+            value = value * 2.0;
+            pocketPair = true;
+            if (value < 5.0) {
+                value = 5.0;
+            }
+        }
+
+        // 3. add 2 points if suited
+        if (card1.suit == card2.suit) {
+            value += 2;
+        }
+
+        // 4. subtract points for gaps
+        Integer distance = highCard - lowCard;
+        if (distance == 3) {
+            value -= 4.0;
+        } else if (distance >= 4) {
+            value -= 5.0;
+        }
+
+        // 5. add bonus point if distance 0 or 1, both cards under Q and not a pocket pair
+        if (distance <= 1 && card1Rank < 12 && card2Rank < 12 && !pocketPair) {
+            value += 1.0;
+        }
+
+
+        return (int)Math.round(value);
     }
 }

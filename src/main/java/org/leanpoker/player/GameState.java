@@ -3,6 +3,7 @@ package org.leanpoker.player;
 public class GameState {
 
 
+    public int dealer;
 
     public Card[] community_cards;
 /*
