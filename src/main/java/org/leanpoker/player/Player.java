@@ -88,7 +88,27 @@ public class Player {
 
 
 
-        if (tripple > 0 && pairs > 0) {
+        boolean flush = false;
+
+        communityCards.clear();
+        card1 = getSuitAsInt(gameState.players[gameState.in_action].hole_cards[0].suit);
+        card2 = getSuitAsInt(gameState.players[gameState.in_action].hole_cards[1].suit);
+
+
+        for (int i=0; i < gameState.community_cards.length; i++ ) {
+            Card cc = gameState.community_cards[i];
+            communityCards.add(getSuitAsInt(cc.suit));
+        }
+
+
+        if (contains(communityCards, card1) > 3 || contains(communityCards, card2) > 3)
+            flush = true;
+
+
+
+        if (flush)
+            return 10000;
+        else if (tripple > 0 && pairs > 0) {
             return 10000;
         }
         else if (tripple > 0) {
@@ -124,9 +144,6 @@ public class Player {
 
 
 
-
-
-
     private static int getRankAsInt(Rank k) {
         if (k == V2) return 2;
         else if (k == V3) return 3;
@@ -144,6 +161,13 @@ public class Player {
         else return 0;
     }
 
+    private static int getSuitAsInt(Suit k) {
+        if (k == Suit.clubs) return 1;
+        else if (k == Suit.diamonds) return 2;
+        else if (k == Suit.hearts) return 3;
+        else if (k == Suit.spades) return 4;
+        else return 0;
+    }
 
     private static int contains(ArrayList<Integer> communityCards, int rank) {
         int count = 0;

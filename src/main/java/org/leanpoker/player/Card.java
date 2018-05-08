@@ -4,7 +4,7 @@ public class Card {
 
 
     public Rank rank;
-    public String suit;
+    public Suit suit;
 
 
 
