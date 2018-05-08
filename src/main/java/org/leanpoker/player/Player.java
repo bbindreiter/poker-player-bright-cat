@@ -71,10 +71,11 @@ public class Player {
 
         if (pair) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
-        }
+        } else
+            return 0;
 
         //call anything
-        return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
+        //return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
 
 
 
