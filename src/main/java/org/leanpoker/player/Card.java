@@ -3,7 +3,7 @@ package org.leanpoker.player;
 public class Card {
 
 
-    public int rank;
+    public Rank rank;
     public String suit;
 
 

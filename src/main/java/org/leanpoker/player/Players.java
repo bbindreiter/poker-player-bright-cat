@@ -16,8 +16,8 @@ public class Players {
     public String stack;
 
     public String version;
-/*
-    public String[] hole_cards;
-*/
+
+    public Card[] hole_cards;
+
 
 }

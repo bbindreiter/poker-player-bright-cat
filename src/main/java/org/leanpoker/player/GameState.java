@@ -3,9 +3,9 @@ package org.leanpoker.player;
 public class GameState {
 
 
-    /*
-    public String[] community_cards;
 
+    public Card[] community_cards;
+/*
     public String dealer;
 
     public String tournament_id;
@@ -20,6 +20,7 @@ public class GameState {
 
     public int current_buy_in;
 
+    public int minimum_raise;
 
     public int in_action;
 /*
