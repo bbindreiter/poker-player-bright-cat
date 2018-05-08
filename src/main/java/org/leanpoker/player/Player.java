@@ -88,14 +88,19 @@ public class Player {
 
 
 
-
-
-
-        if (pairs == 2 || tripple > 0) {
+        if (tripple > 0 && pairs > 0) {
+            return 10000;
+        }
+        else if (tripple > 0) {
+            return 10000;
+        }
+        else if (pairs == 2 || tripple > 0) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + (gameState.minimum_raise * 2);
-        } else if (pairs == 1) {
+        }
+        else if (pairs == 1) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
-        } else
+        }
+        else
             return 0;
 
         //call anything
