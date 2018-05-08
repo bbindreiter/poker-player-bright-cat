@@ -20,7 +20,7 @@ import static org.leanpoker.player.Rank.V9;
 
 public class Player {
 
-    static final String VERSION = "Bright Cat V2";
+    static final String VERSION = "Bright Cat V4";
 
     public static int betRequest(GameState gameState) {
 
@@ -52,7 +52,8 @@ public class Player {
         ArrayList<Integer> communityCards = new ArrayList<>();
         Integer card1 = 0;
         Integer card2 = 0;
-        boolean pair = false;
+        int pairs = 0;
+        int tripple = 0;
 
 
         for (int i=0; i < gameState.community_cards.length; i++ ) {
@@ -63,13 +64,17 @@ public class Player {
         card1 = getRankAsInt(gameState.players[gameState.in_action].hole_cards[0].rank);
         card2 = getRankAsInt(gameState.players[gameState.in_action].hole_cards[1].rank);
 
-        if (communityCards.contains(card1) || communityCards.contains(card2))
-            pair = true;
+        if (communityCards.contains(card1))
+            pairs++;
+        if (communityCards.contains(card2))
+            pairs++;
 
 
 
 
-        if (pair) {
+        if (pairs == 2) {
+            return gameState.current_buy_in - gameState.players[gameState.in_action].bet + (gameState.minimum_raise * 2);
+        } else if (pairs == 1) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         } else
             return 0;
