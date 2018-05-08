@@ -23,9 +23,9 @@ public class GameState {
     public int minimum_raise;
 
     public int in_action;
-/*
-    public String round;
 
+    public int round;
+/*
     public String small_blind;
 
     public String pot;

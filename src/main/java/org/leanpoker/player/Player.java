@@ -106,7 +106,11 @@ public class Player {
 
 
 
-        if (flush)
+        if (gameState.round == 0 && communityCards.size() == 0) {
+            //minimum preflop raise
+            return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
+        }
+        else if (flush)
             return 10000;
         else if (tripple > 0 && pairs > 0) {
             return 10000;
