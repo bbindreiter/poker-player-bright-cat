@@ -64,15 +64,34 @@ public class Player {
         card1 = getRankAsInt(gameState.players[gameState.in_action].hole_cards[0].rank);
         card2 = getRankAsInt(gameState.players[gameState.in_action].hole_cards[1].rank);
 
-        if (communityCards.contains(card1))
+        if (card1 == card2)
             pairs++;
-        if (communityCards.contains(card2))
-            pairs++;
+        else {
+            if (communityCards.contains(card1))
+                pairs++;
+            if (communityCards.contains(card2))
+                pairs++;
+        }
+
+        if (card1 == card2) {
+            if (contains(communityCards, card1) > 0)
+                tripple++;
+        }
+        else if (contains(communityCards, card1) > 1) {
+            tripple++;
+        }
+        else if (contains(communityCards, card2) > 1) {
+            tripple++;
+        }
 
 
 
 
-        if (pairs == 2) {
+
+
+
+
+        if (pairs == 2 || tripple > 0) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + (gameState.minimum_raise * 2);
         } else if (pairs == 1) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
@@ -116,11 +135,18 @@ public class Player {
         else if (k == K) return 13;
         else if (k == A) return 14;
         else return 0;
+    }
 
 
+    private static int contains(ArrayList<Integer> communityCards, int rank) {
+        int count = 0;
+
+        for (int i=0; i < communityCards.size(); i++) {
+            if((communityCards.get(i)) == rank)
+                count++;
+        }
 
 
-
-
+        return count;
     }
 }
