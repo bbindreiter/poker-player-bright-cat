@@ -106,6 +106,10 @@ public class Player {
 
 
 
+
+        return 10000;
+
+        /*
         if (gameState.round == 0 && communityCards.size() == 0) {
             //minimum preflop raise
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
@@ -126,14 +130,11 @@ public class Player {
         }
         else if (communityCards.size() == 0)
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
-        else
-            return 0;
-
-        //call anything
-        //return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
-
-
-
+        else {
+            //NEVER FOLD
+            return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
+        }
+        */
 
 
 
