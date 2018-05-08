@@ -33,9 +33,15 @@ public class Player {
         boolean fold = false;
 
         if (gameState.current_buy_in > gameState.players[gameState.in_action].bet) {
-
+            if (weight >= 12) {
+                return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
+            }
+            else if (weight >= 10) {
+                return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
+            } else
+                return 0;
         }
-        //current_buy_in - players[in_action][bet]
+
 
 
         if (gameState.in_action == gameState.dealer)
@@ -169,7 +175,7 @@ public class Player {
 
 
 
-        if (gameState.round < 3 && gameState.community_cards.length == 0) {
+        if (gameState.round < 1 && gameState.community_cards.length == 0) {
             //minimum preflop raise
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         }

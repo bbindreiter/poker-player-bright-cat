@@ -32,7 +32,7 @@ public class PlayerServlet extends HttpServlet {
 
                 GameState gameState1 = new Gson().fromJson(gameStateParameter , GameState.class);
 
-                int response = Player.betRequestV1(gameState1);
+                int response = Player.betRequestV2(gameState1);
 
                 System.out.println("response: " + response);
 
