@@ -3,6 +3,7 @@ package org.leanpoker.player;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.leanpoker.player.Rank.A;
 import static org.leanpoker.player.Rank.J;
@@ -107,6 +108,52 @@ public class Player {
 
 
 
+
+        boolean straight = false;
+        try {
+
+            communityCards.clear();
+            card1 = getRankAsInt(gameState.players[gameState.in_action].hole_cards[0].rank);
+            card2 = getRankAsInt(gameState.players[gameState.in_action].hole_cards[1].rank);
+
+
+            for (int i = 0; i < gameState.community_cards.length; i++) {
+                Card cc = gameState.community_cards[i];
+                communityCards.add(getRankAsInt(cc.rank));
+            }
+
+            communityCards.add(card1);
+            communityCards.add(card2);
+            Collections.sort(communityCards);
+
+            int currentChain = 0;
+            int currentValue = 0;
+            for (int i = 0; i < communityCards.size(); i++) {
+                currentValue = communityCards.get(i);
+                currentChain = 0;
+
+                for (int j = (i + 1); j < communityCards.size(); j++) {
+
+                    if (communityCards.get(j) == currentValue + 1) {
+                        currentValue = communityCards.get(j);
+                        if (j - 4 == i) {
+                            System.out.println("straight detected");
+                        }
+                    } else
+                        break;
+                }
+            }
+        }
+        catch(Exception e) {
+            System.out.println("error in straight detection");
+            e.printStackTrace();
+        }
+
+
+
+
+
+
         //return 10000;
 
 
@@ -114,6 +161,8 @@ public class Player {
             //minimum preflop raise
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         }
+        else if (straight)
+            return 10000;
         else if (flush)
             return 10000;
         else if (tripple > 0 && pairs > 0) {
