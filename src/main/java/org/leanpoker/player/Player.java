@@ -100,6 +100,8 @@ public class Player {
         else if (pairs == 1) {
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         }
+        else if (communityCards.size() == 0)
+            return gameState.current_buy_in - gameState.players[gameState.in_action].bet;
         else
             return 0;
 

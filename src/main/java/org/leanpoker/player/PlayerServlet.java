@@ -26,13 +26,23 @@ public class PlayerServlet extends HttpServlet {
 
 
             try{
+
+                System.out.println("gameStateParameter: " + gameStateParameter);
+
+
                 GameState gameState1 = new Gson().fromJson(gameStateParameter , GameState.class);
-                resp.getWriter().print(Player.betRequest(gameState1));
+
+                int response = Player.betRequest(gameState1);
+
+                System.out.println("response: " + response);
+
+                resp.getWriter().print(response);
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("exception in doPost");
                 resp.getWriter().print(0);
             }
+
 
 
 
