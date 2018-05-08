@@ -157,7 +157,7 @@ public class Player {
         //return 10000;
 
 
-        if (gameState.round == 0 && communityCards.size() == 0) {
+        if (gameState.round < 3 && communityCards.size() == 0) {
             //minimum preflop raise
             return gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise;
         }
